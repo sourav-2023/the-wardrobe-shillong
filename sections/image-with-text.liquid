@@ -1,0 +1,100 @@
+{%- comment -%} Image with Text / Top Picks Section {%- endcomment -%}
+
+<section class="image-with-text section-spacing">
+  <div class="page-width">
+    <h2 class="section-heading">{{ section.settings.heading | default: 'Top Picks' }}</h2>
+
+    <div class="image-with-text__grid">
+      <div class="image-with-text__media">
+        {%- if section.settings.image != blank -%}
+          <img
+            src="{{ section.settings.image | image_url: width: 800 }}"
+            alt="{{ section.settings.heading | escape }}"
+            width="800"
+            height="auto"
+            loading="lazy"
+          >
+        {%- else -%}
+          <div class="placeholder-image placeholder-image--large">
+            {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="image-with-text__content">
+        {%- assign product = section.settings.product -%}
+        {%- if product != blank -%}
+          <div class="image-with-text__product">
+            <div class="image-with-text__product-image">
+              <img src="{{ product.featured_image | image_url: width: 400 }}" alt="{{ product.title | escape }}" loading="lazy">
+              {%- if product.compare_at_price > product.price -%}
+                <span class="badge badge--sale">Sale</span>
+              {%- endif -%}
+            </div>
+            <div class="image-with-text__product-info">
+              <h3><a href="{{ product.url }}">{{ product.title }}</a></h3>
+              <div class="price-wrapper">
+                {%- if product.compare_at_price > product.price -%}
+                  <s>{{ product.compare_at_price | money }}</s>
+                  <span class="price price--sale">{{ product.price | money }}</span>
+                {%- else -%}
+                  <span class="price">{{ product.price | money }}</span>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- assign linked_collection = section.settings.linked_collection -%}
+        {%- if linked_collection != blank -%}
+          <a href="{{ linked_collection.url }}" class="image-with-text__collection-link">
+            {%- if linked_collection.image != blank -%}
+              <img src="{{ linked_collection.image | image_url: width: 600 }}" alt="{{ linked_collection.title | escape }}" loading="lazy">
+            {%- endif -%}
+            <span>{{ linked_collection.title }}
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </span>
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Image with text",
+  "class": "section-image-with-text",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Top Picks",
+      "label": "Heading"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Featured product"
+    },
+    {
+      "type": "collection",
+      "id": "linked_collection",
+      "label": "Linked collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with text",
+      "settings": {
+        "heading": "Top Picks"
+      }
+    }
+  ]
+}
+{% endschema %}

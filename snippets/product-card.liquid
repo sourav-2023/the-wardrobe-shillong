@@ -1,0 +1,41 @@
+{%- comment -%} Product Card Snippet {%- endcomment -%}
+
+<div class="product-card">
+  <div class="product-card__media">
+    <a href="{{ product.url }}">
+      {%- if product.featured_image != blank -%}
+        <img
+          src="{{ product.featured_image | image_url: width: 600 }}"
+          alt="{{ product.featured_image.alt | default: product.title | escape }}"
+          width="600"
+          height="auto"
+          loading="lazy"
+        >
+      {%- else -%}
+        <div class="placeholder-image">
+          {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+      {%- endif -%}
+    </a>
+    {%- if product.available == false -%}
+      <span class="badge badge--sold-out">Sold out</span>
+    {%- elsif product.compare_at_price > product.price -%}
+      <span class="badge badge--sale">Sale</span>
+    {%- endif -%}
+  </div>
+
+  <div class="product-card__info">
+    <h3 class="product-card__title">
+      <a href="{{ product.url }}">{{ product.title }}</a>
+    </h3>
+
+    <div class="product-card__price">
+      {%- if product.compare_at_price > product.price -%}
+        <span class="price price--compare"><s>{{ product.compare_at_price | money }}</s></span>
+        <span class="price price--sale">{{ product.price | money }}</span>
+      {%- else -%}
+        <span class="price">{{ product.price | money }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+</div>

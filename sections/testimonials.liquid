@@ -1,0 +1,109 @@
+{%- comment -%} Testimonials / Customer Reviews Section {%- endcomment -%}
+
+<section class="testimonials section-spacing">
+  <div class="page-width">
+    <h2 class="section-heading">{{ section.settings.heading | default: 'See what our customers said' }}</h2>
+
+    <div class="testimonials__grid">
+      {%- for block in section.blocks -%}
+        <div class="testimonials__card" {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}
+            <div class="testimonials__image">
+              <img src="{{ block.settings.image | image_url: width: 400 }}" alt="{{ block.settings.name | escape }}" loading="lazy">
+              <div class="testimonials__stars">
+                {%- for i in (1..5) -%}
+                  {%- if i <= block.settings.rating -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  {%- else -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+          <div class="testimonials__content">
+            <div class="testimonials__author">
+              <div class="testimonials__avatar">{{ block.settings.name | slice: 0 }}</div>
+              <div>
+                <strong>{{ block.settings.name }}</strong>
+                {%- if block.settings.date != blank -%}
+                  <small>{{ block.settings.date }}</small>
+                {%- endif -%}
+              </div>
+            </div>
+            <p class="testimonials__text">{{ block.settings.text }}</p>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "class": "section-testimonials",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "See what our customers said",
+      "label": "Heading"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Review image"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "default": "Happy Customer",
+          "label": "Customer name"
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "Date"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "default": "Amazing quality! Highly recommended.",
+          "label": "Review text"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5,
+          "label": "Star rating"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "name": "Happy Customer",
+            "text": "Amazing quality! Highly recommended.",
+            "rating": 5
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

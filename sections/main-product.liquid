@@ -1,0 +1,126 @@
+{%- comment -%} Main Product Template Section {%- endcomment -%}
+
+<section class="product-page section-spacing">
+  <div class="page-width">
+    <div class="product-page__grid">
+      <div class="product-page__media">
+        <div class="product-page__main-image">
+          {%- if product.featured_image != blank -%}
+            <img
+              id="ProductMainImage"
+              src="{{ product.featured_image | image_url: width: 1000 }}"
+              alt="{{ product.featured_image.alt | escape }}"
+              width="1000"
+              height="auto"
+            >
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </div>
+
+        {%- if product.images.size > 1 -%}
+          <div class="product-page__thumbnails">
+            {%- for image in product.images -%}
+              <button class="product-page__thumbnail {% if forloop.first %}product-page__thumbnail--active{% endif %}"
+                data-image-url="{{ image | image_url: width: 1000 }}"
+                data-thumbnail>
+                <img src="{{ image | image_url: width: 150 }}" alt="{{ image.alt | escape }}" width="150" height="auto" loading="lazy">
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="product-page__info">
+        <div class="product-page__breadcrumb">
+          <a href="/">Home</a>
+          {%- if collection -%}
+            <span>/</span>
+            <a href="{{ collection.url }}">{{ collection.title }}</a>
+          {%- endif -%}
+        </div>
+
+        <p class="product-page__vendor">{{ product.vendor }}</p>
+        <h1 class="product-page__title">{{ product.title }}</h1>
+
+        <div class="product-page__price">
+          {%- if product.compare_at_price > product.price -%}
+            <span class="price price--compare"><s>{{ product.compare_at_price | money }}</s></span>
+            <span class="price price--sale">{{ product.price | money }}</span>
+            <span class="badge badge--sale">Sale</span>
+          {%- else -%}
+            <span class="price">{{ product.price | money }}</span>
+          {%- endif -%}
+        </div>
+
+        {%- if product.has_only_default_variant == false -%}
+          <div class="product-page__variants">
+            {%- for option in product.options_with_values -%}
+              <div class="product-page__option">
+                <label>{{ option.name }}</label>
+                <div class="product-page__option-values">
+                  {%- for value in option.values -%}
+                    <button class="product-page__option-btn {% if option.selected_value == value %}product-page__option-btn--selected{% endif %}"
+                      data-option-value="{{ value }}">
+                      {{ value }}
+                    </button>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- form 'product', product -%}
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="ProductVariantId">
+
+          <div class="product-page__quantity">
+            <label for="Quantity">Quantity</label>
+            <div class="quantity-selector">
+              <button type="button" class="quantity-btn" data-quantity-minus aria-label="Decrease quantity">-</button>
+              <input type="number" id="Quantity" name="quantity" value="1" min="1" class="quantity-input">
+              <button type="button" class="quantity-btn" data-quantity-plus aria-label="Increase quantity">+</button>
+            </div>
+          </div>
+
+          <div class="product-page__actions">
+            <button type="submit" name="add" class="btn btn--primary btn--full"
+              {% unless product.available %}disabled{% endunless %}>
+              {%- if product.available -%}
+                Add to cart
+              {%- else -%}
+                Sold out
+              {%- endif -%}
+            </button>
+          </div>
+        {%- endform -%}
+
+        {%- if product.description != blank -%}
+          <div class="product-page__description">
+            <details open>
+              <summary>Description</summary>
+              <div class="product-page__description-content">
+                {{ product.description }}
+              </div>
+            </details>
+          </div>
+        {%- endif -%}
+
+        <div class="product-page__share">
+          <button class="product-page__share-btn" data-share-btn aria-label="Share">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Share
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product information",
+  "class": "section-product",
+  "settings": []
+}
+{% endschema %}

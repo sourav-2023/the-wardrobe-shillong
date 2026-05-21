@@ -1,0 +1,54 @@
+{%- comment -%} Contact Page Section {%- endcomment -%}
+
+<section class="contact-page section-spacing">
+  <div class="page-width">
+    <h1 class="page__title">{{ page.title | default: 'Contact Us' }}</h1>
+
+    {%- if page.content != blank -%}
+      <div class="page__content rte">{{ page.content }}</div>
+    {%- endif -%}
+
+    {%- form 'contact', class: 'contact-form' -%}
+      {%- if form.posted_successfully? -%}
+        <div class="contact-form__success">
+          <p>Thanks for contacting us. We'll get back to you as soon as possible.</p>
+        </div>
+      {%- endif -%}
+
+      {%- if form.errors -%}
+        <div class="contact-form__errors">
+          {{ form.errors | default_errors }}
+        </div>
+      {%- endif -%}
+
+      <div class="contact-form__fields">
+        <div class="contact-form__field">
+          <label for="ContactName">Name</label>
+          <input type="text" id="ContactName" name="contact[name]" required>
+        </div>
+        <div class="contact-form__field">
+          <label for="ContactEmail">Email</label>
+          <input type="email" id="ContactEmail" name="contact[email]" required>
+        </div>
+        <div class="contact-form__field contact-form__field--full">
+          <label for="ContactPhone">Phone number</label>
+          <input type="tel" id="ContactPhone" name="contact[phone]">
+        </div>
+        <div class="contact-form__field contact-form__field--full">
+          <label for="ContactMessage">Message</label>
+          <textarea id="ContactMessage" name="contact[body]" rows="6" required></textarea>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn--primary">Send</button>
+    {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact form",
+  "class": "section-contact",
+  "settings": []
+}
+{% endschema %}

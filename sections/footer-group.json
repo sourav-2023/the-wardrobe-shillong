@@ -1,0 +1,13 @@
+{
+  "name": "Footer group",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "newsletter_heading": "Subscribe to our emails"
+      }
+    }
+  },
+  "order": ["footer"]
+}
