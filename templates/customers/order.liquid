@@ -1,0 +1,42 @@
+{%- layout 'theme' -%}
+
+<section class="customer-page section-spacing">
+  <div class="page-width">
+    <h1>Order {{ order.name }}</h1>
+    <p>Placed on {{ order.created_at | date: "%B %d, %Y" }}</p>
+
+    <table class="customer-orders">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>SKU</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%- for line_item in order.line_items -%}
+          <tr>
+            <td>{{ line_item.title }}</td>
+            <td>{{ line_item.sku }}</td>
+            <td>{{ line_item.price | money }}</td>
+            <td>{{ line_item.quantity }}</td>
+            <td>{{ line_item.line_price | money }}</td>
+          </tr>
+        {%- endfor -%}
+      </tbody>
+    </table>
+
+    <div class="order-totals">
+      <p>Subtotal: {{ order.subtotal_price | money }}</p>
+      {%- for shipping_method in order.shipping_methods -%}
+        <p>Shipping ({{ shipping_method.title }}): {{ shipping_method.price | money }}</p>
+      {%- endfor -%}
+      <p><strong>Total: {{ order.total_price | money }}</strong></p>
+    </div>
+
+    <h2>Shipping Address</h2>
+    <p>{{ order.shipping_address | format_address }}</p>
+  </div>
+</section>

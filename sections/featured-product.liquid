@@ -1,0 +1,107 @@
+{%- comment -%} Featured Product Section {%- endcomment -%}
+
+{%- assign product = section.settings.product -%}
+
+<section class="featured-product section-spacing">
+  <div class="page-width">
+    <div class="featured-product__grid">
+      <div class="featured-product__media">
+        {%- if product != blank -%}
+          <img
+            src="{{ product.featured_image | image_url: width: 800 }}"
+            alt="{{ product.featured_image.alt | escape }}"
+            width="800"
+            height="auto"
+            loading="lazy"
+          >
+        {%- else -%}
+          <div class="placeholder-image">
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="featured-product__info">
+        {%- if product != blank -%}
+          <p class="featured-product__vendor">{{ product.vendor }}</p>
+          <h2 class="featured-product__title">{{ product.title }}</h2>
+
+          <div class="featured-product__price">
+            {%- if product.compare_at_price > product.price -%}
+              <span class="price price--regular">
+                <s>{{ product.compare_at_price | money }}</s>
+              </span>
+              <span class="price price--sale">{{ product.price | money }}</span>
+              <span class="badge badge--sale">Sale</span>
+            {%- else -%}
+              <span class="price">{{ product.price | money }}</span>
+            {%- endif -%}
+          </div>
+
+          {%- if section.settings.show_shipping_note -%}
+            <p class="featured-product__note">
+              <a href="{{ routes.root_url }}policies/shipping-policy">{{ section.settings.shipping_note }}</a>
+            </p>
+          {%- endif -%}
+
+          {%- form 'product', product -%}
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+            <div class="featured-product__actions">
+              <button type="submit" name="add" class="btn btn--primary btn--full"
+                {% unless product.available %}disabled{% endunless %}>
+                {%- if product.available -%}
+                  Add to cart
+                {%- else -%}
+                  Sold out
+                {%- endif -%}
+              </button>
+            </div>
+          {%- endform -%}
+
+          <a href="{{ product.url }}" class="featured-product__details-link">
+            View full details
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        {%- else -%}
+          <p class="featured-product__vendor">Vendor</p>
+          <h2 class="featured-product__title">Product title</h2>
+          <div class="featured-product__price">
+            <span class="price">Rs. 1,299.00</span>
+          </div>
+          <button class="btn btn--primary btn--full" disabled>Add to cart</button>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured product",
+  "class": "section-featured-product",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shipping_note",
+      "default": true,
+      "label": "Show shipping note"
+    },
+    {
+      "type": "text",
+      "id": "shipping_note",
+      "default": "Free Shipping + Get upto 30% OFF today",
+      "label": "Shipping note text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured product"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,42 @@
+{%- comment -%} Search Results Section {%- endcomment -%}
+
+<section class="search-page section-spacing">
+  <div class="page-width">
+    <h1 class="page__title">Search results</h1>
+
+    <form action="{{ routes.search_url }}" method="get" class="search-page__form">
+      <div class="search-page__field">
+        <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search..." class="search-page__input">
+        <button type="submit" class="btn btn--primary">Search</button>
+      </div>
+    </form>
+
+    {%- if search.performed -%}
+      {%- if search.results_count > 0 -%}
+        <p class="search-page__count">{{ search.results_count }} results for "{{ search.terms }}"</p>
+        <div class="product-grid product-grid--4">
+          {%- for item in search.results -%}
+            {%- if item.object_type == 'product' -%}
+              {% render 'product-card', product: item %}
+            {%- else -%}
+              <div class="search-result">
+                <h3><a href="{{ item.url }}">{{ item.title }}</a></h3>
+                <p>{{ item.content | strip_html | truncatewords: 30 }}</p>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <p>No results found for "{{ search.terms }}". Try a different search term.</p>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Search results",
+  "class": "section-search",
+  "settings": []
+}
+{% endschema %}

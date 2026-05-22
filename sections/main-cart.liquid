@@ -1,0 +1,76 @@
+{%- comment -%} Main Cart Section {%- endcomment -%}
+
+<section class="cart-page section-spacing">
+  <div class="page-width">
+    <h1 class="cart-page__title">Your cart</h1>
+
+    {%- if cart.item_count > 0 -%}
+      <form action="{{ routes.cart_url }}" method="post" class="cart-page__form">
+        <table class="cart-page__table">
+          <thead>
+            <tr>
+              <th colspan="2">Product</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- for item in cart.items -%}
+              <tr class="cart-page__item">
+                <td class="cart-page__item-image">
+                  <a href="{{ item.url }}">
+                    <img src="{{ item.image | image_url: width: 150 }}" alt="{{ item.title | escape }}" width="150" height="auto" loading="lazy">
+                  </a>
+                </td>
+                <td class="cart-page__item-details">
+                  <a href="{{ item.url }}" class="cart-page__item-title">{{ item.product.title }}</a>
+                  {%- unless item.product.has_only_default_variant -%}
+                    <small class="cart-page__item-variant">{{ item.variant.title }}</small>
+                  {%- endunless -%}
+                  <a href="{{ item.url_to_remove }}" class="cart-page__item-remove">Remove</a>
+                </td>
+                <td class="cart-page__item-price">
+                  {{ item.price | money }}
+                </td>
+                <td class="cart-page__item-quantity">
+                  <div class="quantity-selector">
+                    <button type="button" class="quantity-btn" onclick="this.parentNode.querySelector('input').stepDown(); this.closest('form').submit();" aria-label="Decrease">-</button>
+                    <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" class="quantity-input" onchange="this.closest('form').submit();">
+                    <button type="button" class="quantity-btn" onclick="this.parentNode.querySelector('input').stepUp(); this.closest('form').submit();" aria-label="Increase">+</button>
+                  </div>
+                </td>
+                <td class="cart-page__item-total">
+                  {{ item.line_price | money }}
+                </td>
+              </tr>
+            {%- endfor -%}
+          </tbody>
+        </table>
+
+        <div class="cart-page__footer">
+          <div class="cart-page__subtotal">
+            <span>Subtotal</span>
+            <span class="cart-page__subtotal-price">{{ cart.total_price | money }}</span>
+          </div>
+          <p class="cart-page__note">Taxes and shipping calculated at checkout</p>
+          <button type="submit" name="checkout" class="btn btn--primary btn--full">Checkout</button>
+          <a href="/collections/all" class="cart-page__continue">Continue shopping</a>
+        </div>
+      </form>
+    {%- else -%}
+      <div class="cart-page__empty">
+        <p>Your cart is empty</p>
+        <a href="/collections/all" class="btn btn--primary">Continue shopping</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Cart",
+  "class": "section-cart",
+  "settings": []
+}
+{% endschema %}

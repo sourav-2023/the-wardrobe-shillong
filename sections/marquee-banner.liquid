@@ -1,0 +1,50 @@
+{%- comment -%} Scrolling Marquee Banner Section {%- endcomment -%}
+
+<section class="marquee-banner">
+  <div class="marquee-banner__track">
+    <div class="marquee-banner__content">
+      {%- for block in section.blocks -%}
+        <span class="marquee-banner__item" {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
+        <span class="marquee-banner__separator">&#9733;</span>
+      {%- endfor -%}
+      {%- for block in section.blocks -%}
+        <span class="marquee-banner__item">{{ block.settings.text }}</span>
+        <span class="marquee-banner__separator">&#9733;</span>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Marquee banner",
+  "class": "section-marquee-banner",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "default": "Free Shipping",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee banner",
+      "blocks": [
+        { "type": "text", "settings": { "text": "FREE SHIPPING" } },
+        { "type": "text", "settings": { "text": "RS.200 OFF TODAY" } },
+        { "type": "text", "settings": { "text": "LIMITED PIECES LEFT" } },
+        { "type": "text", "settings": { "text": "NO RESTOCKING" } },
+        { "type": "text", "settings": { "text": "EXCLUSIVE DROP" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
